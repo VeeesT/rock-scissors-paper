@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Start game</title>
+	<meta charset="utf-8">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+	crossorigin="anonymous">
+	<script type="text/javascript" src="text.json"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+  </head>
+	<body>
+		<div class="alert alert-success alert-dismissible" role="alert" id="xxx" style="display: none">
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="width: auto"><span aria-hidden="true">&times;</span></button>
+		   Компьютер сделал свой ход. Ваш ход...
+		</div>
+		<div style='text-align:center'>
+			<img src='img/rock.jpg' style='width: 1000px'>
+		</div>
+
+		<div class="panel panel-default">
+		
+		  <div class="panel-heading">
+			<h3 class="panel-title">Выберите ваш ход</h3>
+		  </div>
+		  
+		  <div class="panel-body" >
+		   <div class="btn-group" role="group">
+				<select name="" id="select" class="btn btn-default dropdown-toggle" style='height: 45px; width: 200px'></select>
+				
+				<p style='white-space: nowrap'><button style='margin-left: 50px; width: 80px;' class="btn btn-primary btn-lg" onclick="go()" role="button">Go</button></p>
+			</div>
+		  </div>
+		</div>
+		
+		<div id="hmac" style="display: none">
+			<div class="input-group input-group-lg">
+			  <span class="input-group-addon" id="sizing-addon1">@</span>
+			  <input type="text" id="hmac_gen" class="form-control" placeholder="HMAC" aria-describedby="sizing-addon1">
+			</div>
+			
+			<div class="input-group input-group-lg" style='padding-top: 5px; padding-bottom: 5px'>
+			  <span class="input-group-addon" id="sizing-addon1">@</span>
+			  <input type="text" id="key" class="form-control" placeholder="Key" aria-describedby="sizing-addon1">
+			</div>
+			
+			<div class="input-group input-group-lg">
+			  <span class="input-group-addon" id="sizing-addon1">@</span>
+			  <input type="text" id="comp_select" class="form-control" placeholder="Computer selection" aria-describedby="sizing-addon1">
+			</div>
+			
+            <p style='white-space: nowrap; text-align: center; margin-top: 10px'><button style='width: 200px;' class="btn btn-primary btn-lg" role="button"><a target="_blank" href="https://www.freeformatter.com/hmac-generator.html" style="text-decoration: none; color: white">Проверить HMAC</a></button></p>
+
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <b style='font-size: 20px'>&copy; Milan Slutski</b>
+		</div>
+
+		
+	<script>
+		window.onload=function() {
+			setTimeout(function() {document.getElementById('xxx').style.display='';}, 1000);
+			setTimeout(function() {document.getElementById('xxx').style.display='none';}, 3000);
+		}
+		
+	
+		//setTimeout("alert('Компьютер сделал свой ход. Ваш ход...')", 1000);
+		
+		var list = document.getElementById('select'),
+		  arr = JSON.parse(text),
+		  item = document.createElement('option');
+		for (var i = 0; i < arr.length; i++) {
+		  item.text = arr[i];
+		  item.value = i;
+		  list.appendChild(item.cloneNode(true));
+		}
+		
+		function go() {
+			var kol = (arr.length - 1)/2;
+			var key = "qwertyuiasdfghjkzxcvbnm";
+	
+			var choiceComp = Math.floor(Math.random() * (arr.length)); 
+			var computer_select = arr[choiceComp];
+			var choicePeople = document.getElementById("select").value;
+			
+			//var crypto = require('crypto');
+			//var hash = crypto.createHmac('SHA256', key).update(computer_select).digest();
+
+			if(choiceComp == choicePeople){
+				alert("Ничья");
+			} else if (choiceComp != choicePeople){
+				for(var i = 0; i < kol; i++){
+					if(choicePeople >= arr.length){
+						choicePeople = -1;
+					}
+					choicePeople++;
+					if(choicePeople == choiceComp){
+						alert("You win!");
+						break;
+					}
+				}
+				if (choiceComp != choicePeople) {
+					alert("You lose");
+				}
+			} 
+			alert("Выбор компьютера=" + computer_select);
+			document.getElementById('hmac').style.display='';
+			document.getElementById('comp_select').value=computer_select;
+			//document.getElementById('key').value=key;
+			//document.getElementById('hmac_gen').value=hash;
+		}
+	</script>
+  </body>
+</html>
